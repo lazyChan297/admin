@@ -1,15 +1,15 @@
 <template lang="html">
   <div class="bindPhone-wrapper">
-    <p class="title">修改手机号码</p>
+    <p class="title">{{userInfo.mobile?'修改手机号码':'绑定手机号码'}}</p>
     <div class="">
       <div class="layout-tow-columns">
         <div class="column-left">
-          <input type="number" class="column-left" placeholder="请输入手机号码" name="" value="mobile" ref="input" v-model="mobile">
+          <input type="number" class="column-left" :placeholder="placeholder" name="" value="mobile" ref="input" v-model="mobile">
         </div>
       </div>
       <div class="layout-tow-columns">
         <div class="column-left">
-          <input type="number" class="column-left" placeholder="请输入新的手机号码" name="" value="">
+          <input type="number" class="column-left" placeholder="请输入验证码" name="" v-model="code">
         </div>
         <div class="column-right">
           <span class="getCode" @click="sendCode">{{codeText}}</span>
@@ -32,7 +32,10 @@ export default {
       mobile: '',
       codeText: '发送验证码',
       canSendCode: null,
-      bindingWay: 'add'
+      bindingWay: 'add',
+      isNext: null,
+      placeholder: '请输入手机号码',
+      code: null
     }
   },
   mounted() {
@@ -40,8 +43,9 @@ export default {
     if (this.userInfo.mobile && !this.mobile) {
       this.bindingWay = 'change'
       this.mobile = Number(this.userInfo.mobile)
-      this.$refs.input.setAttribute('disabled', false)      
+      this.$refs.input.setAttribute('disabled', true)
       this.canSendCode = true
+      this.isNext = true
     }
   },
   computed: {
@@ -55,9 +59,10 @@ export default {
       if (!this.canSendCode) {
         return false;
       }
-      if (!this.mobile) {
+      let valid = this.validPhone()
+      if (!valid) {
         this.$vux.toast.show({
-          text: '请输入手机号码',
+          text: '请输入正确的手机号码',
           type: 'warn'
         })
         return
@@ -81,24 +86,48 @@ export default {
         }
       })
     },
+    // 验证手机号码
+    validPhone() {
+      let reg = /^1[345789][0-9]{9}$/
+      if (!reg.test(this.mobile)) {
+        this.$vux.toast.show({
+          text: '请输入正确的手机号码',
+          type: 'warn'
+        })
+        return false
+      }
+      return true
+    },
     // 验证code
     validCode() {
-      let data = Qs.stringify({phone: this.mobile, code: this.code})
+      // 手机和验证码是否为空
+      let valid = this.validPhone() && this.code.length === 4
+      if (!valid) {
+        return 
+      }
+      let data = Qs.stringify({mobile: this.mobile, code: this.code})
       this.$axios.post('/users/mobile', data).then((res) => {
+        if (res.status == 0) {
+          this.$vux.toast.show({
+              text: res.info,
+              time: 1000,
+              type: 'warn'
+            })
+        }
         if (res.status == 1) {
-          // return Promise.resolve(res)
-          if (this.bindingWay === 'change') {
-            this.mobile = null
-            this.canSendCode = false
-            this.bindingWay = 'add'
+          if (this.isNext) {
+            this.mobile = ''
+            this.code = ''
+            this.isNext = false
+            this.$refs.input.removeAttribute('disabled') 
           } else {
             this.$vux.toast.show({
               text: '绑定成功',
-              time: '1s'
+              time: 500
             })
             let timer = setTimeout((res) => {
               this.$router.go(-1)
-            }, 1000)
+            }, 500)
           }
         }
       })

@@ -11,10 +11,11 @@ import 'nprogress/nprogress.css'
 import {checkToken} from '@/common/js/util'
 import store from '@/store/index'
 import {ToastPlugin} from 'vux'
+import VueLazyLoad from 'vue-lazyload'
 Vue.config.productionTip = false
 
 Vue.use(ToastPlugin)
-
+Vue.use(VueLazyLoad)
 NProgress.inc(0.2)
 NProgress.configure({ easing: 'ease', speed: 500, showSpinner: false })
 
@@ -40,10 +41,6 @@ instance.defaults.timeout = 10000
 instance.defaults.withCredentials = true
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 axios.interceptors.request.use(config => {
-    // post
-    if (config.method === 'post') {
-
-    }
     return config
 }, err => {
     return Promise.reject(err)

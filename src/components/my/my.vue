@@ -4,11 +4,11 @@
       <div class="detail">
         <div class="">
           <div class="img-box">
-            <img :src="userInfo.avatarUrl" alt="" width="60" height="60">
+            <img v-lazy="userInfo.avatarUrl" alt="" width="60" height="60">
           </div>
           <div class="user-box">
-            <p class="name">{{userInfo.nickName}}</p>
-            <p class="already">今天是你来到氢链的第{{userInfo.days}}天</p>
+            <p class="name" v-text="userInfo.nickName" ></p>
+            <p class="already" >今天是你来到氢链的第{{userInfo.days}}天</p>
           </div>
           <router-link tag="div" class="icon" to="/userInfo">
             <i class="icon-setting"></i>
@@ -48,7 +48,6 @@ export default {
     getUserInfo() {
       this.$axios.get('/users/info').then((res) => {
         this.saveUserInfo(res.data.userInfo)
-        console.log(res)
       })
     },
     // 获取代理区域
