@@ -1,8 +1,8 @@
 <template lang="html">
-  <div class="index-wrapper">
+  <div class="index-wrapper" v-show="isLoading">
     <!-- 明细 -->
     <div class="header">
-      <div class="detail">
+      <div class="detail" v-cloak>
         <p class="detail-title">总收益 (元)</p>
         <div class="detail-content">
           <p class="detail-number">{{info.totalIncome}}</p>
@@ -60,7 +60,8 @@ export default {
   data() {
     return {
       currentTabIndex: 0,
-      info: {}
+      info: {},
+      isLoading: false
     }
   },
   mounted() {
@@ -74,6 +75,7 @@ export default {
       this.$axios.get('/agent/index').then( res => {
         if (res.status == 1) {
           this.info = res.data
+          this.isLoading = true
         }
       })
     }
@@ -85,6 +87,8 @@ export default {
 </script>
 
 <style lang="stylus">
+  [v-cloak] 
+    display: none;
   .index-wrapper
     .header
       padding: 11px 15px 4px;

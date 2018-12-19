@@ -33,7 +33,7 @@
         </div>
         <div class="prod-item" v-for="(goods, gIndex) in item.goods">
           <div class="prod-item-left">
-            <img :src="goods.img" alt="">
+            <img v-lazy="goods.img" alt="">
           </div>
           <div class="prod-item-center">
             <p class="prodName">{{goods.name}}</p>

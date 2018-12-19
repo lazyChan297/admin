@@ -7,8 +7,12 @@
 </template>
 
 <script>
+import {Loading} from 'vux'
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    Loading
+  }
 }
 </script>
 

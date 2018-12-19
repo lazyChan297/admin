@@ -10,12 +10,13 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import {checkToken} from '@/common/js/util'
 import store from '@/store/index'
-import {ToastPlugin} from 'vux'
+import {ToastPlugin, LoadingPlugin} from 'vux'
 import VueLazyLoad from 'vue-lazyload'
 Vue.config.productionTip = false
 
 Vue.use(ToastPlugin)
 Vue.use(VueLazyLoad)
+Vue.use(LoadingPlugin)
 NProgress.inc(0.2)
 NProgress.configure({ easing: 'ease', speed: 500, showSpinner: false })
 
@@ -41,11 +42,16 @@ instance.defaults.timeout = 10000
 instance.defaults.withCredentials = true
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 axios.interceptors.request.use(config => {
+    Vue.$vux.loading.show({
+      text: '加载中'
+    })
+    // console.log(Vue.$vux)
     return config
 }, err => {
     return Promise.reject(err)
 })
 axios.interceptors.response.use( response => {
+  Vue.$vux.loading.hide()
   return response.data
 })
 instance.defaults.headers.common['x-access-token'] = global.token

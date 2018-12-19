@@ -1,6 +1,6 @@
 <!-- 客户主页 -->
 <template lang="html">
-  <div class="custom-wrapper">
+  <div class="custom-wrapper" v-show="isLoading">
     <div class="avatar">
       <img :src="customerInfo.avatar" alt="">
       <div>
@@ -55,17 +55,16 @@
 
 <script>
 import { XDialog } from 'vux'
+// import axios from '@/common/js/axios'
 export default {
   data() {
     return {
       showDialog:false,
-      customerInfo: {}
+      customerInfo: {},
+      isLoading: false
     }
   },
-  created() {
-    
-  },
-  mounted() {
+  activated() {
     let sn = this.$route.params.userSn
     this.userSn = sn
     this.getCustomer(sn)
@@ -78,17 +77,16 @@ export default {
       this.$router.push(`/customOrderList/${this.userSn}`)
     },
     getCustomer(sn) {
+      this.isLoading = false
       this.$axios.get('/agent/customerInfo', {
         params: {
           sn: sn
         }
       }).then((res) => {
         this.customerInfo = res.data.customerInfo
+        this.isLoading = true
       })
     }
-  },
-  computed: {
-    
   }
 }
 </script>

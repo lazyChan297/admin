@@ -1,28 +1,29 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Index from '@/components/index'
-import Purchase from '@/components/purchase/purchase'
-import Replenish from '@/components/replenish/replenish'
-import Payment from '@/components/payment/payment'
-import PurchaseList from '@/components/purchase-list/purchase-list'
-import PurchaseDetail from '@/components/purchase-detail/purchase-detail'
-import IncomeList from '@/components/incomeList/incomeList'
-import Commission from '@/components/commission/commission'
-import Custom from '@/components/custom/custom'
-import CustomList from '@/components/customList/customList'
-import CustomOrderList from '@/components/customerOrList/customerOrList'
-import OrderDetail from '@/components/orderDetail/orderDetail'
-import Delivery from '@/components/delivery/delivery'
-import Search from '@/components/search/search'
-import OrderList from '@/components/orderList/orderList'
-import Express from '@/components/express/express'
-import Success from '@/components/success/success'
-import My from '@/components/my/my'
-import UserInfo from '@/components/userInfo/userInfo'
-import BindPhone from '@/components/bindPhone/bindPhone'
-import Apply from '@/components/apply/apply'
-import Visitor from '@/components/visitor/visitor'
-import DeliveryList from '@/components/deliveryList/deliveryList'
+
+const Index = () => import('@/components/index')
+const Purchase = () => import('@/components/purchase/purchase')
+const Replenish = () => import('@/components/replenish/replenish')
+const Payment = () => import('@/components/payment/payment')
+const PurchaseList = () => import('@/components/purchase-list/purchase-list')
+const PurchaseDetail = () => import('@/components/purchase-detail/purchase-detail')
+const IncomeList = () => import('@/components/incomeList/incomeList')
+const Commission = () => import('@/components/commission/commission')
+const Custom = () => import('@/components/custom/custom')
+const CustomList = () => import('@/components/customList/customList')
+const CustomOrderList = () => import('@/components/customerOrList/customerOrList')
+const OrderDetail = () => import('@/components/orderDetail/orderDetail')
+const Delivery = () => import('@/components/delivery/delivery')
+const Search = () => import('@/components/search/search')
+const OrderList = () => import('@/components/orderList/orderList')
+const Express = () => import('@/components/express/express')
+const Success = () => import('@/components/success/success')
+const My = () => import('@/components/my/my')
+const UserInfo = () => import('@/components/userInfo/userInfo')
+const BindPhone = () => import('@/components/bindPhone/bindPhone')
+const Apply = () => import('@/components/apply/apply')
+const Visitor = () => import('@/components/visitor/visitor')
+const DeliveryList = () => import('@/components/deliveryList/deliveryList')
 Vue.use(Router)
 
 export default new Router({
