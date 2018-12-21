@@ -20,10 +20,10 @@
       <span class="column-left">代理区域</span>
       <span class="column-right area">{{getAgent()}}</span>
     </div>
-    <div class="layout-tow-columns">
+    <router-link tag="div" class="layout-tow-columns" to="/dataReport">
       <span class="column-left">代理商数据报告</span>
       <span class="column-right"><i class="icon-jiantou"></i></span>
-    </div>
+    </router-link>
     <router-link tag="div" class="layout-tow-columns" to="/apply">
       <span class="column-left">申请其它区域代理商</span>
       <span class="column-right"><i class="icon-jiantou"></i></span>
@@ -34,22 +34,14 @@
 
 <script>
 import TabBar from '@/base/tabBar/tabBar'
-import {mapMutations, mapGetters} from 'vuex'
+import {mapGetters} from 'vuex'
 export default {
   data() {
     return {
       currentTabIndex: 3
     }
   },
-  created() {
-    this.getUserInfo()
-  },
   methods: {
-    getUserInfo() {
-      this.$axios.get('/users/info').then((res) => {
-        this.saveUserInfo(res.data.userInfo)
-      })
-    },
     // 获取代理区域
     getAgent() {
       let obj = this.userInfo.agent, agent = ''
@@ -57,10 +49,7 @@ export default {
         agent = obj[k]
       }
       return agent
-    },
-    ...mapMutations({
-      saveUserInfo: 'SAVE_USERINFO'
-    })
+    }
   },
   computed: {
     ...mapGetters([

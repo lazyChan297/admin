@@ -47,6 +47,7 @@
     </div>
     <!-- 进货确认支付弹窗 -->
     <x-dialog v-model="showDialog" :hide-on-blur="true">
+      <!-- 进货 -->
       <div class="dialog-validCode" v-if="type!=='replenish'">
         <div class="dialog-head">
           <span>支付金额</span>
@@ -63,10 +64,11 @@
               <input type="text" v-model="code" placeholder="请输入验证码">
             </div>
           </div>
-          <div @click="payment" class="submit">确认</div>
+          <div @click="validCode" class="submit">确认</div>
           <div @click="showDialog = false" class="cancel">取消</div>
         </div>
       </div>
+      <!-- 补货 -->
       <div class="dialog-choose" v-else>
         <p class="dialog-title">您确定补货吗</p>
         <div class="dialog-button-group">
@@ -139,15 +141,34 @@ export default {
         }
       })
     },
-    // 验证code
+    // 验证code并提交订单
     validCode() {
       if (!this.code) {
         return 
       }
-      let data = Qs.stringify({phone: this.userInfo.mobile, code: this.code})
-      this.$axios.post('/users/mobile', data).then((res) => {
-        console.log(res)
+      let goods = []
+      this.cart.forEach((item, index) => {
+        goods.push({
+          id: item.id,
+      		quantity: item.num
+        })
       })
+      let params = Qs.stringify({code: this.code, goods:JSON.stringify(goods), addr: this.address.id})
+      this.$axios.post('/agent/stock', params).then((res) => {
+        if (res.status == 1) {
+          this.showDialog = false
+          this.$vux.toast.show({
+            text: res.info,
+            time: 500
+          })
+          let timer = setTimeout(() => {
+            this.$router.push({
+              path: '/orderList'
+            })
+          }, 500)
+        }
+      })
+
     },
     payment() {
 
@@ -158,7 +179,7 @@ export default {
         total += item.num * item.tradePrice
       })
       return total
-    }
+    },
   },
   computed: {
     ...mapGetters([

@@ -41,13 +41,13 @@
     </ul>
     <!-- 邀请好友 -->
     <ul class="list">
-      <li class="list-item">
+      <router-link to="/invite" class="list-item" tag="li">
         <i class="icon-invite"></i>
         <div class="list-item-right">
           <span>邀请好友</span>
         </div>
         <i class="icon icon-jiantou"></i>
-      </li>
+      </router-link>
     </ul>
     <tab-bar :currentTabIndex="currentTabIndex"></tab-bar>
     <router-view/>

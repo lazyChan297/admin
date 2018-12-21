@@ -24,6 +24,9 @@ const BindPhone = () => import('@/components/bindPhone/bindPhone')
 const Apply = () => import('@/components/apply/apply')
 const Visitor = () => import('@/components/visitor/visitor')
 const DeliveryList = () => import('@/components/deliveryList/deliveryList')
+const Invite = () => import('@/components/invite/invite')
+const marketingConfirm = () => import('@/components/marketingConfirm/marketingConfirm')
+const DataReport = () => import('@/components/dataReport/dataReport') 
 Vue.use(Router)
 
 export default new Router({
@@ -177,6 +180,27 @@ export default new Router({
     {
       path: '/success',
       component: Success
+    },
+    {
+      path: '/invite',
+      component: Invite,
+      meta: {
+        title: '邀请好友'
+      }
+    },
+    {
+      path: '/marketing/confirm',
+      component: marketingConfirm,
+      meta: {
+        title: '推广邀请'
+      }
+    },
+    {
+      path: '/dataReport',
+      component: DataReport,
+      meta: {
+        title: '代理商报告'
+      }
     }
   ]
 })

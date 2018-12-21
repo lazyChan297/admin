@@ -28,7 +28,7 @@
     <ul class="search-result">
       <li class="order-item" @click="selectItem(item.orderNo)" v-for="(item,index) in orderList">
         <div class="layout-tow-columns">
-          <span class="column-left statu">状态</span>
+          <span class="column-left statu">状态<span>{{item.orderType}}</span></span>
           <span class="column-right">{{getStatus(item.status)}}</span>
         </div>
         <div class="prod-item" v-for="(goods, gIndex) in item.goods">
@@ -61,8 +61,8 @@
         </div>
       </li>
     </ul>
-    <ul class="orderType" v-show="showType" @click="toggleType">
-      <li class="all" :data-index="index" v-for="(item,index) in typeList">{{item}}</li>
+    <ul class="orderType" v-show="showType">
+      <li class="all" :data-index="index" v-for="(item,index) in typeList" @click.stop="searchByType(item.statu, index)">{{item.name}}</li>
     </ul>
     <tab-bar :currentTabIndex="currentTabIndex"></tab-bar>
     <div class="mask" @click="showType = false" v-show="showType"></div>
@@ -91,7 +91,12 @@ export default {
       currentTypeTxt: '所有订单',
       currentType: 1,
       showType: false,
-      typeList: ['所有订单', '补货订单', '进货订单', '客户订单'],
+      typeList: [
+        {statu: 0, name: '所有订单'},
+        {statu: 1, name: '客户订单'},
+        {statu: 2, name: '补货订单'},
+        {statu: 3, name: '进货订单'}
+      ],
       autoFixed: true,
       query: null,
       orderList: []
@@ -127,10 +132,11 @@ export default {
       }
     },
     // 获取订单列表
-    getOrderList({status}) {
+    getOrderList({status, type}) {
       this.$axios.get('/agent/orders',{
         params: {
-          status: status
+          status: status,
+          type: type
         }
       }).then( res => {
         if (res.status === 1) {
@@ -147,6 +153,22 @@ export default {
       }).then(res => {
         console.log(res)
       })
+    },
+    // 根据订单类型获取列表
+    searchByType(t, index) {
+      this.currentTypeTxt = this.typeList[index].name
+      let statu = this.currentType
+      this.$axios.get('/agent/orders',{
+        params: {
+          status: statu,
+          type: t
+        }
+      }).then( res => {
+        if (res.status === 1) {
+          this.orderList = res.data.orders
+        }
+      })
+      this.showType = false
     },
     // status表示物流状态：0未支付;1确认收货;2已付款(待发货);3已发货(待收货)；4退货;8已评价
     getStatus(statu) {
@@ -189,13 +211,6 @@ export default {
     onCancel() {
 
     }
-  },
-  watch: {
-    // query(newVal) {
-    //   debounce(() =>{
-    //     this.searchOrder(newVal)
-    //   }, 200)
-    // }
   }
 }
 </script>
@@ -258,6 +273,19 @@ export default {
     margin-bottom:60px
     .order-item
       margin-bottom:10px
+      .statu
+        span
+          display:inline-block
+          font-size:10px
+          background:#FF7584
+          height: 16px
+          vertical-align: middle
+          line-height: 16px
+          color: #fff
+          border-top-right-radius: 100px
+          border-bottom-right-radius: 100px
+          padding: 0 4px
+          margin-left: 5px
       .prod-item
         position:relative
         display: flex

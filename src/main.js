@@ -30,7 +30,6 @@ if (process.env.NODE_ENV === 'development') {
   // 测服务器
   global.serverHost = "https://ceshi168.caomeng.me"
 }
-
 //获取token
 checkToken(url)
 
@@ -57,6 +56,15 @@ axios.interceptors.response.use( response => {
 instance.defaults.headers.common['x-access-token'] = global.token
 
 
+
+//获取用户信息
+if (global.token) {
+  Vue.prototype.$axios.get('/users/info').then((res) => {
+    store.dispatch('saveUserInfo', res.data.userInfo)
+  })
+}
+
+//全局导航守卫
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {
     document.title = to.meta.title

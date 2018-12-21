@@ -25,6 +25,12 @@ const mutations = {
     }
 }
 
+const actions = {
+    saveUserInfo({commit}, userInfo) {
+        commit(SAVE_USERINFO, userInfo)
+    }
+}
+
 const getters = {
     userInfo: state => state.userInfo,
     cart: state => state.cart,
@@ -34,5 +40,6 @@ const getters = {
 export default new Vuex.Store({
     state,
     mutations,
-    getters
+    getters,
+    actions
 })
